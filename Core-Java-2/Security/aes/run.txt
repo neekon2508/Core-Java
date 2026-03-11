@@ -1,5 +1,0 @@
-*Warning: These command lines only use in this program
-javac Security/aes/*.java 
-java Security.aes.AESTest -genkey Security/aes/secret.key
-java Security.aes.AESTest -encrypt Security/aes/document.txt Security/aes/encrypted.txt Security/aes/secret.key
->java Security.aes.AESTest -decrypt Security/aes/encrypted.txt Security/aes/decrypted.txt Security/aes/secret.key
