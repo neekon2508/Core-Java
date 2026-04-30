@@ -1,2 +1,9 @@
 *.class
+
 bin/
+
+~$*.docx
+
+~$*.xlsx
+
+~$*.pptx
