@@ -4,20 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+class SynchronizedInteger {
+    private int value;
+
+    public int get() {
+        return value;
+    }
+
+    public void set(int value) {
+        this.value = value;
+    }
+}
+
 public class App {
 
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        ExecutorService executor = Executors.newFixedThreadPool(8);
-        ExecutorCompletionService<Integer> service = new ExecutorCompletionService<>(executor);
-        List<Callable<Integer>> tasks = new ArrayList<>();
-        for (int i = 1; i <= 100; i++) {
-            int a = i;
-            Callable<Integer> t = () -> a * 10;
-            tasks.add(t);
+    public static void main(String[] args) {
+        SynchronizedInteger syncInt = new SynchronizedInteger();
+        ExecutorService executor = Executors.newFixedThreadPool(16);
+        for (int i = 0; i < 1000; i++) {
+            final int val = i;
+            executor.execute(() -> syncInt.set(val));
+            executor.execute(() -> {
+                int current = syncInt.get();
+                if (val != current)
+                    System.out.println("FALSE");
+            });
         }
-        for (Callable<Integer> task : tasks)
-            service.submit(task);
-        for (int i = 0; i < tasks.size(); i++)
-            System.out.println(service.take().get());
+        executor.shutdown();
+        System.out.println("Test complete");
     }
 }
